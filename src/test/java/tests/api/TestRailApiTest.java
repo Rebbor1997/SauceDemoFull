@@ -1,5 +1,6 @@
 package tests.api;
 
+import adapters.ProjectsAdapter;
 import baseEntities.BaseApiTest;
 import com.google.gson.GsonBuilder;
 import endpoints.ProjectEndpoints;
@@ -7,13 +8,17 @@ import endpoints.UsersEndpoints;
 import io.restassured.mapper.ObjectMapperType;
 import models.Project;
 import models.ProjectTypes;
+import models.ProjectsList;
 import models.User;
 import org.apache.http.HttpStatus;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import javax.xml.ws.Response;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
@@ -63,6 +68,21 @@ public class TestRailApiTest extends BaseApiTest {
                 .body("get(0).name", is(user.getName()))
                 .body("get(0).email", equalTo(user.getEmail()))
                 .statusCode(HttpStatus.SC_OK);
+    }
+
+    @Test
+    public void getAllProjectsAdapterTest(){
+        List<Project> projectsList = new ProjectsAdapter().get();
+
+        System.out.println(projectsList.get(0));
+        System.out.println(projectsList.size());
+    }
+    @Test
+    public void getProjectDetailsTest1() {
+        int projectID = 80;
+        Project actualProject = new ProjectsAdapter().get(projectID);
+
+        System.out.println(actualProject);
     }
 
     @Test
@@ -116,5 +136,14 @@ public class TestRailApiTest extends BaseApiTest {
                 .body("name", is("Alex Tros"))
                 .body("email", equalTo("atrostyanko+0601@gmail.com"))
                 .statusCode(HttpStatus.SC_OK);
+    }
+
+    @Test
+    public void staticJsonValidationTest() throws FileNotFoundException {
+        Project expectedProject = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()
+                .fromJson(new FileReader("src/test/resources/expectedProject.json"), Project.class);
+
+        Project actualProject = new ProjectsAdapter().get(80);
+        Assert.assertTrue(expectedProject.equals(actualProject));
     }
 }

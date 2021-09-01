@@ -152,7 +152,6 @@ public class ApiSimpleTest extends BaseApiTest {
 
     @Test
     public void deleteTest(){
-
         given()
                 .when()
                 .delete("https://reqres.in/api/users/2")

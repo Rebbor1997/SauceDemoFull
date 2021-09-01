@@ -40,7 +40,6 @@ public class BrowsersService {
     public WebDriver getDriver() {
         return driver;
     }
-
     public Waits getWaiters() {
         return waiters;
     }

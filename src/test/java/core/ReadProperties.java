@@ -34,7 +34,6 @@ public final class ReadProperties {
     }
 
 
-
     public String getURL() {
         return properties.getProperty("url");
     }
