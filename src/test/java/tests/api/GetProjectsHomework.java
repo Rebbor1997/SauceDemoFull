@@ -22,9 +22,10 @@ public class GetProjectsHomework  extends BaseApiTest {
 
     @Test
     public void getAllProjects(){
+
         given().
                 when()
-                .get(String.format(String.format(ProjectEndpoints.get_projects)))
+                .get(ProjectEndpoints.get_projects)
                 .then()
                 .log().body()
                 .statusCode(HttpStatus.SC_OK);

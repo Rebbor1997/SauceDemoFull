@@ -21,7 +21,9 @@ public class ChainOfTest extends BaseApiTest {
                 .name("PRO18")
                 .suite_mode(ProjectTypes.SINGLE_SUITE_BASELINES)
                 .show_announcement(true)
+                .flag(true)
                 .build();
+       // System.out.println(new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(project));
 
         projectID = given()
                 .body(project, ObjectMapperType.GSON)
@@ -53,5 +55,16 @@ public class ChainOfTest extends BaseApiTest {
 
         Assert.assertEquals(updatedProject.getName(), newProject.getName());
         Assert.assertEquals(updatedProject.is_completed(), newProject.is_completed());
+    }
+
+    @Test(dependsOnMethods = "updateProject")
+    public void deleteProjectTest(){
+        given()
+                .post(String.format(ProjectEndpoints.delete_project, projectID))
+                .then()
+                .log().body()
+                .assertThat()
+                .statusCode(HttpStatus.SC_OK);
+
     }
 }
